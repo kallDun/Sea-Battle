@@ -13,10 +13,12 @@ namespace Sea_Battle.Design
     class TableDraw
     {
         private Point tableCoord;
+        private bool prepareMode;
 
-        public TableDraw(Point tableCoord)
+        public TableDraw(Point tableCoord, bool prepareMode = false)
         {
             this.tableCoord = tableCoord;
+            this.prepareMode = prepareMode;
         }
 
         public void DrawTable(Graphics g, in Cell[,] cells)
@@ -36,7 +38,6 @@ namespace Sea_Battle.Design
                         );
                 }
             }
-
             DrawMarkers(g, coord);
         }
 
@@ -61,8 +62,8 @@ namespace Sea_Battle.Design
         {
             g.DrawRectangle(cellPen, coord.X, coord.Y, CellSize, CellSize);
 
-            if (cell.isBlownUp && (!cell.hasNoShip)) DrawCross(g, coord);
-            else if (cell.isBlownUp) DrawFill(g, coord);
+            if (cell.isBlownUp && (!cell.hasNoShip) && !prepareMode) DrawCross(g, coord);
+            else if (cell.isBlownUp && cell.hasNoShip) DrawFill(g, coord);
         }
 
         private void DrawFill(Graphics g, Point coord)

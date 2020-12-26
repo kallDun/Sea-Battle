@@ -11,7 +11,7 @@ namespace Sea_Battle.Design
 
         public void updatePrepare(Graphics g, Player player)
         {
-            var tableDraw = new TableDraw(player.tableCoordinates);
+            var tableDraw = new TableDraw(player.tableCoordinates, prepareMode: true);
             var elementsDraw = new ElementsDraw(player.listCoordinates);
 
             var field = player.getField();
