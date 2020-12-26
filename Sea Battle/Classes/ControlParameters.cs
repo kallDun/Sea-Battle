@@ -13,6 +13,8 @@ namespace Sea_Battle.Classes
         public static readonly Point player1_ListCoordinates = new Point(650, 50);
         public static readonly Point player2_ListCoordinates = new Point(120, 50);
 
+        public static readonly Point winnerTextLocation = new Point(530, 610);
+
         public static readonly int cellsInColInList = 2;
 
         public static readonly int cellsInRowInList = 5;

@@ -15,6 +15,7 @@ namespace Sea_Battle.Classes
 
         private List<Player> players = new List<Player> { };
         private PlayersDraw players_drawing = new PlayersDraw();
+        private Player winner = null;
 
         private bool everyoneIsReady = false;
         private bool endGame = false;
@@ -27,9 +28,9 @@ namespace Sea_Battle.Classes
             activePlayer = players.First();
         }
         
-        public void update(Graphics g)
+        public void Update(Graphics g)
         {
-            updateStatus(g);
+            UpdateStatus(g);
 
             if (everyoneIsReady && !endGame)
             {
@@ -37,14 +38,19 @@ namespace Sea_Battle.Classes
                 {
                     if (player.CheckIsLose())
                     {
-                        getOtherPlayer(activePlayer).AddScore();
+                        winner = GetOtherPlayer(player);
+                        winner.AddScore();
                         endGame = true;
                     }
                 }
             }
+            else if (endGame)
+            {
+                players_drawing.updateWinSituation(g, winner);
+            }
         }
 
-        private void updateStatus(Graphics g)
+        private void UpdateStatus(Graphics g)
         {
             if (everyoneIsReady)
             {
@@ -72,7 +78,7 @@ namespace Sea_Battle.Classes
             }
         }
 
-        private Player getOtherPlayer(Player player)
+        private Player GetOtherPlayer(Player player)
         {
             if (players.IndexOf(player) + 1 < players.Count())
             {
@@ -92,6 +98,7 @@ namespace Sea_Battle.Classes
                 player.restartPlayer();
             }
             endGame = false;
+            winner = null;
             everyoneIsReady = false;
         }
 
@@ -107,7 +114,7 @@ namespace Sea_Battle.Classes
             {
                 if (controlMouse.MouseClickToShoot(e, activePlayer))
                 {
-                    activePlayer = getOtherPlayer(activePlayer);
+                    activePlayer = GetOtherPlayer(activePlayer);
                 }
             }  
             else if (!everyoneIsReady)
@@ -117,7 +124,7 @@ namespace Sea_Battle.Classes
             }
         }
 
-        public void keyPressed(KeyEventArgs e) 
+        public void KeyPressed(KeyEventArgs e) 
         {
             if (endGame)
             {
@@ -127,7 +134,7 @@ namespace Sea_Battle.Classes
             if (everyoneIsReady)
             {
                 if (controlKeyboard.keyPressedInGameMode(e, activePlayer))
-                    activePlayer = getOtherPlayer(activePlayer);
+                    activePlayer = GetOtherPlayer(activePlayer);
             }
             else
             {

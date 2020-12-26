@@ -1,4 +1,5 @@
-﻿using Sea_Battle.Classes;
+﻿using Newtonsoft.Json;
+using Sea_Battle.Classes;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -7,6 +8,8 @@ namespace Sea_Battle
 {
     public partial class Form1 : Form
     {
+        private Graphics g;
+
         public Form1() => InitializeComponent();
 
         private Gameplay gameplay = new Gameplay();
@@ -16,14 +19,13 @@ namespace Sea_Battle
         private void timer_Tick(object sender, EventArgs e)
         {
             pictureGraphics.Image = new Bitmap(Size.Width, Size.Height);
-            Graphics g = Graphics.FromImage(pictureGraphics.Image);
-
-            gameplay.update(g);
+            g = Graphics.FromImage(pictureGraphics.Image);
+            gameplay.Update(g);
 
             pictureGraphics.Refresh();
         }
 
-        private void Form1_KeyDown(object sender, KeyEventArgs e) => gameplay.keyPressed(e);
+        private void Form1_KeyDown(object sender, KeyEventArgs e) => gameplay.KeyPressed(e);
 
         private void pictureGraphics_MouseClick(object sender, MouseEventArgs e) => gameplay.MouseClick(e);
 

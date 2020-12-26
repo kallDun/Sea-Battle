@@ -13,7 +13,7 @@ namespace Sea_Battle.Classes.Control
         public void MouseMovingToChangePlaceToShoot(MouseEventArgs e, Player activePlayer)
         {
             var coord = getCoord(e, activePlayer);
-            if (IsMouseOnTable(e, coord))
+            if (IsMouseOnTable(coord))
             {
                 activePlayer.ChangePlaceToActiveCell(coord);
             }
@@ -25,13 +25,13 @@ namespace Sea_Battle.Classes.Control
             int Y = (e.Y - activePlayer.tableCoordinates.Y) / CellSize - 1;
             return new Point(X, Y);
         }
-        private bool IsMouseOnTable(MouseEventArgs e, Point coord) =>
+        private bool IsMouseOnTable(Point coord) =>
             coord.X >= 0 && coord.X < TableSize && coord.Y >= 0 && coord.Y < TableSize;
 
         public bool MouseClickToShoot(MouseEventArgs e, Player activePlayer)
         {
             MouseMovingToChangePlaceToShoot(e, activePlayer);
-            if (IsMouseOnTable(e, getCoord(e, activePlayer)))
+            if (IsMouseOnTable(getCoord(e, activePlayer)))
                 return activePlayer.TryToShoot();
             else 
                 return false;
@@ -40,7 +40,7 @@ namespace Sea_Battle.Classes.Control
         public void MouseMoveToChoosePosition(MouseEventArgs e, Player activePlayer)
         {
             var coord = getCoord(e, activePlayer);
-            if (IsMouseOnTable(e, coord))
+            if (IsMouseOnTable(coord))
             {
                 activePlayer.ChangePositionToActiveShip(coord);
             }
@@ -73,7 +73,7 @@ namespace Sea_Battle.Classes.Control
         public void MouseClickToSetUpTheShip(MouseEventArgs e, Player activePlayer)
         {
             MouseMoveToChoosePosition(e, activePlayer);
-            if (IsMouseOnTable(e, getCoord(e, activePlayer))) activePlayer.TryToSetTheShip();
+            if (IsMouseOnTable(getCoord(e, activePlayer))) activePlayer.TryToSetTheShip();
         }
 
     }

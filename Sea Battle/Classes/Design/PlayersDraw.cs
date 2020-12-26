@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-using static Sea_Battle.Classes.ControlParameters;
+using static Sea_Battle.Design.DrawParameters;
 
 namespace Sea_Battle.Design
 {
@@ -44,6 +44,13 @@ namespace Sea_Battle.Design
             tableDraw.DrawTable(g, player.getField());
             tableDraw.DrawDestroyedShips(g, player.GetDestroyedShips());
             tableDraw.DrawInfo(g, player.name, player.scores);
+        }
+
+        public void updateWinSituation(Graphics g, Player winner)
+        {
+            var text = $"Winner is {winner.name}\n('space' to restart)";
+
+            g.DrawString(text, textFont, textColor, ControlParameters.winnerTextLocation);
         }
 
     }
