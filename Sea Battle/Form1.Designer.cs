@@ -95,7 +95,7 @@
             this.textBox_ip.Name = "textBox_ip";
             this.textBox_ip.Size = new System.Drawing.Size(100, 20);
             this.textBox_ip.TabIndex = 4;
-            this.textBox_ip.Text = "127.0.0.1";
+            this.textBox_ip.Text = "25.65.42.164";
             // 
             // textBox_port
             // 

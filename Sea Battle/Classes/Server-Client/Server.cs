@@ -27,6 +27,7 @@ namespace Sea_Battle.Classes.Server_Client
                 handler = listenSocket.Accept();
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
+
         }
 
         public Player GetData()

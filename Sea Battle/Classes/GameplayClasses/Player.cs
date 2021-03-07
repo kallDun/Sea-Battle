@@ -26,9 +26,11 @@ namespace Sea_Battle.Classes
         [JsonProperty]
         public Point listCoordinates { get; private set; }
 
-        // for local game
+        // for online game
         [JsonProperty]
         public bool isTurn;
+        [JsonProperty]
+        public bool isLoad = false;
 
         public Player(string name, Point tableCoordinates, Point listCoordinates)
         {
@@ -70,8 +72,7 @@ namespace Sea_Battle.Classes
         public bool CheckIsLose()
         {
             field.updateDestroyedShips();
-            if (field.isAllShipsDestroyed()) return true;
-            return false;
+            return field.isAllShipsDestroyed();
         }
 
         public void restartPlayer()
@@ -103,5 +104,6 @@ namespace Sea_Battle.Classes
 
         public void ChangeField(Field field) => this.field = field;
         public void ChangeName(string name) => this.name = name;
+        public void ChangeScores(int scores) => this.scores = scores;
     }
 }

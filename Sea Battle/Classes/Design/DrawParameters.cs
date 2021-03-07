@@ -7,6 +7,7 @@ namespace Sea_Battle.Design
         public static readonly Pen boldPen = new Pen(Brushes.Black, 2f);
         public static readonly Pen cellPen = new Pen(Brushes.Gray, 1f);
         public static readonly Pen activeCellPen = new Pen(Brushes.BlueViolet, 2.5f);
+        public static readonly Pen second_activeCellPen = new Pen(Brushes.CornflowerBlue, 2.1f);
         public static readonly Pen crossPen = new Pen(Brushes.Red, 1.5f);
         public static readonly Pen shipPen = new Pen(Brushes.DarkSlateGray, 3f);
         public static readonly Pen activePen = new Pen(Brushes.BlueViolet, 2.5f);

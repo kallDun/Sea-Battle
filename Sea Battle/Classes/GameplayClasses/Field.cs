@@ -58,7 +58,7 @@ namespace Sea_Battle.Classes
             initialize();
         }
 
-        public bool isAllShipsDestroyed() => destroyedShips.Count() == ships.Count();
+        public bool isAllShipsDestroyed() => (destroyedShips.Count() == ships.Count()) && (ships.Count() == Parameters.ships.Count);
 
         public bool IsAvailablePlaceForShip(in Ship activeShip)
         {

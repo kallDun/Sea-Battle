@@ -50,9 +50,9 @@ namespace Sea_Battle.Design
             g.DrawString($"{name} ({scores} scores)", textFont, textColor, point);
         }
 
-        public void DrawActiveCell(Graphics g, Point point)
+        public void DrawActiveCell(Graphics g, Point point, bool isSecond = false)
         {
-            g.DrawRectangle(activeCellPen, 
+            g.DrawRectangle(isSecond? second_activeCellPen : activeCellPen, 
                 (tableCoord.X + CellSize) + point.X * CellSize,
                 (tableCoord.Y + CellSize) + point.Y * CellSize, 
                 CellSize, CellSize);
