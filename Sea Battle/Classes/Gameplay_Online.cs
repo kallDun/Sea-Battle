@@ -15,7 +15,6 @@ namespace Sea_Battle.Classes
         private ControlKeyboard controlKeyboard = new ControlKeyboard();
         private ControlMouse controlMouse = new ControlMouse();
 
-        private List<Player> players = new List<Player> { };
         private PlayersDraw players_drawing = new PlayersDraw();
         private Player winner = null;
 
@@ -23,6 +22,7 @@ namespace Sea_Battle.Classes
         private bool endGame = false;
 
         private Player ourPlayer;
+        private Player otherPlayer;
         private IServer server;
         private bool canDoAnything = true;
 
@@ -31,15 +31,13 @@ namespace Sea_Battle.Classes
             this.server = server;
 
             ourPlayer = new Player(
-                $"Player {new Random().Next(1, 1000)}", 
-                player1_TableCoordinates, 
-                player1_ListCoordinates);
+                $"Player {(isTurn ? 1 : 2)}", 
+                isTurn? player1_TableCoordinates : player2_TableCoordinates,
+                isTurn? player1_ListCoordinates : player2_ListCoordinates);
             ourPlayer.isTurn = isTurn;
-            
-            players.Add(ourPlayer);
 
             server.SendData(ourPlayer);
-            players.Add(server.GetData());
+            otherPlayer = (server.GetData());
         }
         
         public void Update(Graphics g)
@@ -48,7 +46,7 @@ namespace Sea_Battle.Classes
 
             if (everyoneIsReady && !endGame)
             {
-                foreach (var player in players) // check if anyone won
+                foreach (var player in new List<Player> { ourPlayer, otherPlayer }) // check if anyone won
                 {
                     if (player.CheckIsLose())
                     {
@@ -57,7 +55,7 @@ namespace Sea_Battle.Classes
                         endGame = true;
                     }
                 }
-                canDoAnything = !players[1].isTurn;
+                canDoAnything = !otherPlayer.isTurn;
             }
             else if (endGame)
             {
@@ -69,49 +67,35 @@ namespace Sea_Battle.Classes
         {
             if (everyoneIsReady)
             {
-                players_drawing.updateGame(g, players, ourPlayer);
+                players_drawing.updateGame(g, new List<Player> { ourPlayer, otherPlayer }, ourPlayer);
                 return;
             }
             else
-            if (!ourPlayer.IsReady())
-                players_drawing.updatePrepare(g, ourPlayer);
-            else
+            if (ourPlayer.IsReady() && otherPlayer.IsReady())
             {
-                server.SendData(ourPlayer);
-                players[1] = server.GetData();
-
-                if (players[1].IsReady())
-                {
-                    everyoneIsReady = true;
-                    players[0].PrepareForGame();
-                    players[1] = server.GetData();
-                }
+                everyoneIsReady = true;
+                ourPlayer.PrepareForGame();
+                otherPlayer.PrepareForGame();
             }
+            else 
+                players_drawing.updatePrepare(g, ourPlayer);
         }
 
         public void updateServerTick()
         {
             server.SendData(ourPlayer);
-            if (players.Count > 1) players[1] = server.GetData();
+            otherPlayer = server.GetData();
         }
 
         public Player GetOtherPlayer(Player player)
         {
-            if (players.IndexOf(player) + 1 < players.Count())
-            {
-                return players[players.IndexOf(player) + 1];
-            }
-            else
-            {
-                return players[0];
-            }
+            if (player == ourPlayer) return otherPlayer;
+            else return ourPlayer;
         }
 
         public void RestartGame()
         {
-            ourPlayer = players.First();
             ourPlayer.restartPlayer();
-            server.SendData(ourPlayer);
             endGame = false;
             winner = null;
             everyoneIsReady = false;

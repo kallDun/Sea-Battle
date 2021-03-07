@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Text;
 using System;
+using System.IO;
 
 namespace Sea_Battle.Classes.Server_Client
 {
@@ -45,6 +46,11 @@ namespace Sea_Battle.Classes.Server_Client
             while (handler.Available > 0);
 
             // converting to json and return
+            using (FileStream fs = File.Create(Environment.CurrentDirectory + @"\File.json"))
+            {
+                byte[] info = new UTF8Encoding(true).GetBytes(str.ToString());
+                fs.Write(info, 0, info.Length);
+            }
             return JsonConvert.DeserializeObject<Player>(str.ToString());
         }
 

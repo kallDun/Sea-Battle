@@ -8,9 +8,9 @@ namespace Sea_Battle.Classes
 {
     class Player
     {
-        private MoveControl moveControl;
-        private ShipControl shipControl;
-        private Field field;
+        public MoveControl moveControl { get; private set; }
+        public ShipControl shipControl { get; private set; }
+        public Field field { get; private set; }
         public string name { get; private set; }
         public int scores { get; private set; } = 0;
 
