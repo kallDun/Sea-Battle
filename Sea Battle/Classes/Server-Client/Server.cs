@@ -5,7 +5,6 @@ using System.Net;
 using System.Text;
 using System;
 using System.IO;
-
 namespace Sea_Battle.Classes.Server_Client
 {
     class Server : IServer
@@ -45,13 +44,20 @@ namespace Sea_Battle.Classes.Server_Client
             }
             while (handler.Available > 0);
 
+
             // converting to json and return
-            using (FileStream fs = File.Create(Environment.CurrentDirectory + @"\File.json"))
+            try
             {
-                byte[] info = new UTF8Encoding(true).GetBytes(str.ToString());
-                fs.Write(info, 0, info.Length);
+                Player obj = JsonConvert.DeserializeObject<Player>(str.ToString());
+                return obj;
             }
-            return JsonConvert.DeserializeObject<Player>(str.ToString());
+            catch (Exception) 
+            {
+                return null;
+            }
+
+            // save in file to check
+            //File.WriteAllText(Environment.CurrentDirectory + @"\File.json", JsonConvert.SerializeObject(obj));
         }
 
         public void SendData(Player player)

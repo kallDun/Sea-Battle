@@ -35,6 +35,12 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Nancy, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nancy.1.4.1\lib\net40\Nancy.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Serialization.JsonNet, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nancy.Serialization.JsonNet.1.4.1\lib\net40\Nancy.Serialization.JsonNet.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -56,7 +62,9 @@
     <Compile Include="Classes\Control\ControlMouse.cs" />
     <Compile Include="Classes\Design\DrawParameters.cs" />
     <Compile Include="Classes\Design\ElementsDraw.cs" />
-    <Compile Include="Classes\Gameplay_Online.cs" />
+    <Compile Include="Classes\Gameplay_Online.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Classes\GameplayClasses\Cell.cs" />
     <Compile Include="Classes\GameplayClasses\Field.cs" />
     <Compile Include="Classes\GameplayClasses\MoveControl.cs" />

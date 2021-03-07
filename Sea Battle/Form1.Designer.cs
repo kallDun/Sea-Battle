@@ -107,6 +107,7 @@
             // 
             // server_update_timer
             // 
+            this.server_update_timer.Interval = 20;
             this.server_update_timer.Tick += new System.EventHandler(this.server_update_timer_Tick);
             // 
             // Form1
@@ -141,7 +142,7 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TextBox textBox_ip;
         private System.Windows.Forms.TextBox textBox_port;
-        private System.Windows.Forms.Timer server_update_timer;
+        protected System.Windows.Forms.Timer server_update_timer;
     }
 }
 

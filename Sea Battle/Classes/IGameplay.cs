@@ -14,8 +14,6 @@ namespace Sea_Battle.Classes
 
         void UpdateStatus(Graphics g);
 
-        Player GetOtherPlayer(Player player);
-
         void RestartGame();
 
         void MouseMoving(MouseEventArgs e);

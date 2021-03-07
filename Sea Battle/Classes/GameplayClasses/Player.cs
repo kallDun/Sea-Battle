@@ -1,4 +1,5 @@
 ﻿
+using Newtonsoft.Json;
 using Sea_Battle.Classes.GameplayClasses;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,18 +9,25 @@ namespace Sea_Battle.Classes
 {
     class Player
     {
+        [JsonProperty]
         public MoveControl moveControl { get; private set; }
+        [JsonProperty]
         public ShipControl shipControl { get; private set; }
+        [JsonProperty]
         public Field field { get; private set; }
+        [JsonProperty]
         public string name { get; private set; }
+        [JsonProperty]
         public int scores { get; private set; } = 0;
-
+        [JsonProperty]
         public List<int> leftShips { get; private set; }
-
+        [JsonProperty]
         public Point tableCoordinates { get; private set; }
+        [JsonProperty]
         public Point listCoordinates { get; private set; }
 
         // for local game
+        [JsonProperty]
         public bool isTurn;
 
         public Player(string name, Point tableCoordinates, Point listCoordinates)
@@ -52,8 +60,8 @@ namespace Sea_Battle.Classes
 
         public bool TryToShoot()
         {
-            if (CanAnyoneShoot(GetActiveCell())) 
-            { 
+            if (CanAnyoneShoot(GetActiveCell()))
+            {
                 return field.Shoot(GetActiveCell());
             }
             return false;
@@ -92,5 +100,8 @@ namespace Sea_Battle.Classes
 
         public void MoveActiveCell(int offsetX, int offsetY) => moveControl.MoveActiveCell(offsetX, offsetY);
         public void ChangePlaceToActiveCell(Point point) => moveControl.SetCoordForActiveCell(point);
+
+        public void ChangeField(Field field) => this.field = field;
+        public void ChangeName(string name) => this.name = name;
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
@@ -6,7 +7,9 @@ namespace Sea_Battle.Classes
 {
     class Ship
     {
+        [JsonProperty]
         public List<Point> coordinates { get; private set; }
+        [JsonProperty]
         public int type { get; private set; }
 
         public Ship(List<Point> coordinates)

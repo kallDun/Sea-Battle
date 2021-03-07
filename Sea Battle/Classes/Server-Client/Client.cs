@@ -42,7 +42,14 @@ namespace Sea_Battle.Classes.Server_Client
             while (socket.Available > 0);
 
             // converting to json and return
-            return JsonConvert.DeserializeObject<Player>(str.ToString());
+            try
+            {
+                return JsonConvert.DeserializeObject<Player>(str.ToString());
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public void SendData(Player player)

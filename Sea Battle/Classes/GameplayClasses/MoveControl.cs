@@ -1,4 +1,5 @@
 ﻿
+using Newtonsoft.Json;
 using System.Drawing;
 using static Sea_Battle.Parameters;
 
@@ -6,6 +7,7 @@ namespace Sea_Battle.Classes.GameplayClasses
 {
     class MoveControl
     {
+        [JsonProperty]
         public Point activeCell { get; private set; }
 
         public MoveControl(Point activeCell) => this.activeCell = activeCell;

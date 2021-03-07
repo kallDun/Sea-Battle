@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
@@ -8,8 +9,11 @@ namespace Sea_Battle.Classes
 {
     class Field
     {
+        [JsonProperty]
         public Cell[,] cells { get; private set; }
+        [JsonProperty]
         public List<Ship> ships { get; private set; } = new List<Ship> { };
+        [JsonProperty]
         public List<Ship> destroyedShips { get; private set; } = new List<Ship> { };
 
         public Field() => initialize();

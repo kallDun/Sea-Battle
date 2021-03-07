@@ -1,4 +1,5 @@
 ﻿
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -7,12 +8,13 @@ namespace Sea_Battle.Classes
 {
     class ShipControl
     {
+        [JsonProperty]
         public Ship activeShip { get; private set; } = null;
+        [JsonProperty]
         public int positionOfContrlShip { get; private set; } = 0;
-
-        private List<int> leftShips;
+        [JsonProperty]
+        public List<int> leftShips { get; private set; }
         public ShipControl(List<int>  leftShips) => this.leftShips = leftShips;
-
 
         public void createNewShip(int position)
         {

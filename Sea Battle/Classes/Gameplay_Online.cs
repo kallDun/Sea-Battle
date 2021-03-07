@@ -5,12 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using static Sea_Battle.Classes.ControlParameters;
 
 namespace Sea_Battle.Classes
 {
-    class Gameplay_Online : IGameplay
+    class Gameplay_Online : Form1, IGameplay
     {
         private ControlKeyboard controlKeyboard = new ControlKeyboard();
         private ControlMouse controlMouse = new ControlMouse();
@@ -18,13 +19,16 @@ namespace Sea_Battle.Classes
         private PlayersDraw players_drawing = new PlayersDraw();
         private Player winner = null;
 
+        // checkers:
         private bool everyoneIsReady = false;
         private bool endGame = false;
+        private bool canDoAnything = true;
+        private bool isWaiting = false;
+        private int timesToCheckLosers = 3;
 
         private Player ourPlayer;
         private Player otherPlayer;
         private IServer server;
-        private bool canDoAnything = true;
 
         public Gameplay_Online(IServer server, bool isTurn)
         {
@@ -46,20 +50,23 @@ namespace Sea_Battle.Classes
 
             if (everyoneIsReady && !endGame)
             {
-                foreach (var player in new List<Player> { ourPlayer, otherPlayer }) // check if anyone won
+                if (timesToCheckLosers == 0)
                 {
-                    if (player.CheckIsLose())
+                    if (ourPlayer.CheckIsLose()) winner = otherPlayer;
+                    else if (otherPlayer.CheckIsLose()) winner = ourPlayer;
+
+                    if (winner != null)
                     {
-                        winner = GetOtherPlayer(player);
                         winner.AddScore();
                         endGame = true;
                     }
                 }
-                canDoAnything = !otherPlayer.isTurn;
+                else timesToCheckLosers--;
             }
             else if (endGame)
             {
                 players_drawing.updateWinSituation(g, winner);
+                if (!otherPlayer.IsReady()) RestartGame();
             }
         }
 
@@ -67,30 +74,47 @@ namespace Sea_Battle.Classes
         {
             if (everyoneIsReady)
             {
-                players_drawing.updateGame(g, new List<Player> { ourPlayer, otherPlayer }, ourPlayer);
+                players_drawing.updateGame(g, 
+                    new List<Player> { ourPlayer, otherPlayer }, 
+                    ourPlayer.isTurn ? ourPlayer : otherPlayer);
+
+                var other = (!ourPlayer.isTurn ? ourPlayer : otherPlayer);
+                new TableDraw(other.tableCoordinates).DrawActiveCell(g, other.GetActiveCell());
                 return;
             }
             else
             if (ourPlayer.IsReady() && otherPlayer.IsReady())
             {
-                everyoneIsReady = true;
+                server_update_timer.Stop();
+                server.SendData(ourPlayer);
+                ourPlayer.ChangeField(otherPlayer.field);
+                ourPlayer.ChangeName(otherPlayer.name);
+                Thread.Sleep(1000);
+                server_update_timer.Start();
+
                 ourPlayer.PrepareForGame();
-                otherPlayer.PrepareForGame();
+                everyoneIsReady = true;
             }
-            else 
+            else
                 players_drawing.updatePrepare(g, ourPlayer);
         }
 
+        // ping data between players
         public void updateServerTick()
         {
             server.SendData(ourPlayer);
-            otherPlayer = server.GetData();
-        }
 
-        public Player GetOtherPlayer(Player player)
-        {
-            if (player == ourPlayer) return otherPlayer;
-            else return ourPlayer;
+            var other = server.GetData();
+            if (other != null) otherPlayer = other;
+
+            if (everyoneIsReady && !endGame)
+            {
+                if (!otherPlayer.isTurn && !ourPlayer.isTurn && !isWaiting) ourPlayer.isTurn = true;
+                else isWaiting = false;
+
+                canDoAnything = ourPlayer.isTurn;
+                ourPlayer.field.updateDestroyedShips();
+            }
         }
 
         public void RestartGame()
@@ -99,6 +123,7 @@ namespace Sea_Battle.Classes
             endGame = false;
             winner = null;
             everyoneIsReady = false;
+            timesToCheckLosers = 3;
         }
 
         public void MouseMoving(MouseEventArgs e)
@@ -115,8 +140,8 @@ namespace Sea_Battle.Classes
                 {
                     if (controlMouse.MouseClickToShoot(e, ourPlayer))
                     {
-                        ourPlayer.isTurn = !ourPlayer.isTurn;
-                        server.SendData(ourPlayer);
+                        ourPlayer.isTurn = false;
+                        isWaiting = true;
                     }
                 }
                 else if (!everyoneIsReady)
@@ -136,10 +161,13 @@ namespace Sea_Battle.Classes
                     if (controlKeyboard.isRestart(e)) RestartGame();
                 }
                 else
-            if (everyoneIsReady)
+                if (everyoneIsReady)
                 {
                     if (controlKeyboard.keyPressedInGameMode(e, ourPlayer))
-                        ourPlayer = GetOtherPlayer(ourPlayer);
+                    {
+                        ourPlayer.isTurn = false;
+                        isWaiting = true;
+                    }
                 }
                 else
                 {

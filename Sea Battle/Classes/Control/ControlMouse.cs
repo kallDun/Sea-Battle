@@ -31,10 +31,7 @@ namespace Sea_Battle.Classes.Control
         public bool MouseClickToShoot(MouseEventArgs e, Player activePlayer)
         {
             MouseMovingToChangePlaceToShoot(e, activePlayer);
-            if (IsMouseOnTable(getCoord(e, activePlayer)))
-                return activePlayer.TryToShoot();
-            else 
-                return false;
+            return IsMouseOnTable(getCoord(e, activePlayer)) ? activePlayer.TryToShoot() : false;
         }
 
         public void MouseMoveToChoosePosition(MouseEventArgs e, Player activePlayer)
