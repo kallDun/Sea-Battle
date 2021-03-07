@@ -19,6 +19,9 @@ namespace Sea_Battle.Classes
         public Point tableCoordinates { get; private set; }
         public Point listCoordinates { get; private set; }
 
+        // for local game
+        public bool isTurn;
+
         public Player(string name, Point tableCoordinates, Point listCoordinates)
         {
             this.name = name;

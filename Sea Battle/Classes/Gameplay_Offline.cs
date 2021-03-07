@@ -8,7 +8,7 @@ using static Sea_Battle.Classes.ControlParameters;
 
 namespace Sea_Battle.Classes
 {
-    class Gameplay
+    class Gameplay_Offline : IGameplay
     {
         private ControlKeyboard controlKeyboard = new ControlKeyboard();
         private ControlMouse controlMouse = new ControlMouse();
@@ -21,7 +21,7 @@ namespace Sea_Battle.Classes
         private bool endGame = false;
         private Player activePlayer;
 
-        public Gameplay()
+        public Gameplay_Offline()
         {
             players.Add(new Player("Player 1", player1_TableCoordinates, player1_ListCoordinates));
             players.Add(new Player("Player 2", player2_TableCoordinates, player2_ListCoordinates));
@@ -50,7 +50,7 @@ namespace Sea_Battle.Classes
             }
         }
 
-        private void UpdateStatus(Graphics g)
+        public void UpdateStatus(Graphics g)
         {
             if (everyoneIsReady)
             {
@@ -78,7 +78,7 @@ namespace Sea_Battle.Classes
             }
         }
 
-        private Player GetOtherPlayer(Player player)
+        public Player GetOtherPlayer(Player player)
         {
             if (players.IndexOf(player) + 1 < players.Count())
             {
@@ -90,7 +90,7 @@ namespace Sea_Battle.Classes
             }
         }
 
-        private void RestartGame()
+        public void RestartGame()
         {
             activePlayer = players.First();
             foreach (var player in players)
