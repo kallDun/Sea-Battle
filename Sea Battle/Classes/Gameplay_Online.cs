@@ -60,8 +60,8 @@ namespace Sea_Battle.Classes
                     int count2 = otherPlayer.GetDestroyedShips().Count();
                     int max_count = Parameters.ships.Count();
 
-                    if (count1 == max_count) winner = otherPlayer;
-                    else if (count2 == max_count) winner = ourPlayer;
+                    if (count1 == max_count) winner = ourPlayer;
+                    else if (count2 == max_count) winner = otherPlayer;
 
                     if (winner != null)
                     {
@@ -99,12 +99,13 @@ namespace Sea_Battle.Classes
             else
             if (ourPlayer.IsReady() && otherPlayer.IsReady())
             {
+
                 server.SendData(ourPlayer);
                 server_update_timer.Stop();
 
                 ourPlayer.ChangeField(otherPlayer.field);
-                ourPlayer.ChangeName(otherPlayer.name);
-                ourPlayer.ChangeScores(otherPlayer.scores);
+                /*ourPlayer.ChangeName(otherPlayer.name);
+                ourPlayer.ChangeScores(otherPlayer.scores);*/
                 ourPlayer.PrepareForGame();
 
                 Thread.Sleep(1000 * waiting_time_in_sec);
@@ -144,17 +145,6 @@ namespace Sea_Battle.Classes
             everyoneIsReady = false;
             isWaiting = max_isWaiting_times;
             timesToCheckLosers_Now = timesToCheckLosers_Max;
-
-            server.SendData(ourPlayer);
-            server_update_timer.Stop();
-
-            ourPlayer.ChangeField(otherPlayer.field);
-            ourPlayer.ChangeName(otherPlayer.name);
-            ourPlayer.ChangeScores(otherPlayer.scores);
-
-            Thread.Sleep(1000 * waiting_time_in_sec);
-            server_update_timer.Start();
-            ourPlayer.restartPlayer();
         }
 
         public void MouseMoving(MouseEventArgs e)
