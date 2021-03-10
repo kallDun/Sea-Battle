@@ -32,6 +32,7 @@ namespace Sea_Battle.Classes
         [JsonProperty]
         public bool isLoad = false;
 
+
         public Player(string name, Point tableCoordinates, Point listCoordinates)
         {
             this.name = name;

@@ -21,19 +21,18 @@ namespace Sea_Battle.Classes
         private Player winner = null;
 
         // checkers:
-        private const int max_isWaiting_times = 12;
-        private const int waiting_time_in_sec = 10;
         private const int timesToCheckLosers_Max = 100;
+        private const int timesToWaitingTurnMax = 30;
+        private int timesToCheckLosers_Now = timesToCheckLosers_Max;
+        private int timesToWaitingTurn = 0;
+        
 
         private bool everyoneIsReady = false;
         private bool endGame = false;
-        private bool canDoAnything = true;
-        private int isWaiting = 0;
-        private int timesToCheckLosers_Now = timesToCheckLosers_Max;
+        private bool isOurTurnNow = true;
 
         private Player ourPlayer, otherPlayer;
         private IServer server;
-
         private Field otherPlayer_field;
 
         public Gameplay_Online(IServer server, bool isTurn)
@@ -69,7 +68,7 @@ namespace Sea_Battle.Classes
                     {
                         winner.AddScore();
                         endGame = true;
-                        canDoAnything = true;
+                        isOurTurnNow = true;
                     }
                 }
                 else if (timesToCheckLosers_Now > 0) timesToCheckLosers_Now--;
@@ -99,15 +98,17 @@ namespace Sea_Battle.Classes
             else
             if (ourPlayer.IsReady() && otherPlayer.IsReady())
             {
-                if (!ourPlayer.isLoad && !otherPlayer.isLoad)
+                if (!ourPlayer.isLoad)
                 {
                     otherPlayer_field = otherPlayer.field;
                     ourPlayer.isLoad = true;
                 }
-                else if (ourPlayer.isLoad && otherPlayer.isLoad)
+                else
+                if (ourPlayer.isLoad && otherPlayer.isLoad)
                 {
                     ourPlayer.ChangeField(otherPlayer_field);
                     ourPlayer.PrepareForGame();
+                    isOurTurnNow = ourPlayer.isTurn;
                     everyoneIsReady = true;
                 }
             }
@@ -124,10 +125,11 @@ namespace Sea_Battle.Classes
 
             if (everyoneIsReady && !endGame)
             {
-                if (!otherPlayer.isTurn && !ourPlayer.isTurn && isWaiting == 0) ourPlayer.isTurn = true;
-                else if (isWaiting > 0) isWaiting--;
+                if (!otherPlayer.isTurn && timesToWaitingTurn == 0) isOurTurnNow = true;
+                else if (timesToWaitingTurn > 0) timesToWaitingTurn--;
 
-                canDoAnything = ourPlayer.isTurn;
+                ourPlayer.isTurn = isOurTurnNow;
+
                 ourPlayer.field.updateDestroyedShips();
             }
         }
@@ -139,7 +141,6 @@ namespace Sea_Battle.Classes
             endGame = false;
             winner = null;
             everyoneIsReady = false;
-            isWaiting = max_isWaiting_times;
             timesToCheckLosers_Now = timesToCheckLosers_Max;
         }
 
@@ -151,14 +152,14 @@ namespace Sea_Battle.Classes
 
         public void MouseClick(MouseEventArgs e)
         {
-            if (canDoAnything)
+            if (isOurTurnNow)
             {
                 if (everyoneIsReady && !endGame)
                 {
                     if (controlMouse.MouseClickToShoot(e, ourPlayer))
                     {
-                        ourPlayer.isTurn = false;
-                        isWaiting = max_isWaiting_times;
+                        isOurTurnNow = false;
+                        timesToWaitingTurn = timesToWaitingTurnMax;
                     }
                 }
                 else if (!everyoneIsReady)
@@ -171,7 +172,7 @@ namespace Sea_Battle.Classes
 
         public void KeyPressed(KeyEventArgs e) 
         {
-            if (canDoAnything)
+            if (isOurTurnNow)
             {
                 if (endGame)
                 {
@@ -182,8 +183,8 @@ namespace Sea_Battle.Classes
                 {
                     if (controlKeyboard.keyPressedInGameMode(e, ourPlayer))
                     {
-                        ourPlayer.isTurn = false;
-                        isWaiting = max_isWaiting_times;
+                        isOurTurnNow = false;
+                        timesToWaitingTurn = timesToWaitingTurnMax;
                     }
                 }
                 else
