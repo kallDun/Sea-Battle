@@ -1,0 +1,16 @@
+C:\Users\User\source\repos\Sea Battle\Sea Battle\bin\Release\Sea Battle.exe.config
+C:\Users\User\source\repos\Sea Battle\Sea Battle\bin\Release\Sea Battle.exe
+C:\Users\User\source\repos\Sea Battle\Sea Battle\bin\Release\Sea Battle.pdb
+C:\Users\User\source\repos\Sea Battle\Sea Battle\bin\Release\Nancy.dll
+C:\Users\User\source\repos\Sea Battle\Sea Battle\bin\Release\Nancy.Serialization.JsonNet.dll
+C:\Users\User\source\repos\Sea Battle\Sea Battle\bin\Release\Newtonsoft.Json.dll
+C:\Users\User\source\repos\Sea Battle\Sea Battle\bin\Release\Nancy.xml
+C:\Users\User\source\repos\Sea Battle\Sea Battle\bin\Release\Newtonsoft.Json.xml
+C:\Users\User\source\repos\Sea Battle\Sea Battle\obj\Release\Sea Battle.csprojAssemblyReference.cache
+C:\Users\User\source\repos\Sea Battle\Sea Battle\obj\Release\Sea_Battle.Form1.resources
+C:\Users\User\source\repos\Sea Battle\Sea Battle\obj\Release\Sea_Battle.Properties.Resources.resources
+C:\Users\User\source\repos\Sea Battle\Sea Battle\obj\Release\Sea Battle.csproj.GenerateResource.cache
+C:\Users\User\source\repos\Sea Battle\Sea Battle\obj\Release\Sea Battle.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\Sea Battle\Sea Battle\obj\Release\Sea Battle.csproj.CopyComplete
+C:\Users\User\source\repos\Sea Battle\Sea Battle\obj\Release\Sea Battle.exe
+C:\Users\User\source\repos\Sea Battle\Sea Battle\obj\Release\Sea Battle.pdb
