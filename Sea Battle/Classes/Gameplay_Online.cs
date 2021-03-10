@@ -34,6 +34,8 @@ namespace Sea_Battle.Classes
         private Player ourPlayer, otherPlayer;
         private IServer server;
 
+        private Field otherPlayer_field;
+
         public Gameplay_Online(IServer server, bool isTurn)
         {
             this.server = server;
@@ -60,8 +62,8 @@ namespace Sea_Battle.Classes
                     int count2 = otherPlayer.GetDestroyedShips().Count();
                     int max_count = Parameters.ships.Count();
 
-                    if (count1 == max_count) winner = ourPlayer;
-                    else if (count2 == max_count) winner = otherPlayer;
+                    if (count1 == max_count) winner = otherPlayer;
+                    else if (count2 == max_count) winner = ourPlayer;
 
                     if (winner != null)
                     {
@@ -84,35 +86,30 @@ namespace Sea_Battle.Classes
         {
             if (everyoneIsReady)
             {
-                if (otherPlayer.isLoad)
-                {
-                    players_drawing.updateGame(g,
-                    new List<Player> { ourPlayer, otherPlayer },
-                    ourPlayer.isTurn ? ourPlayer : otherPlayer);
+                players_drawing.updateGame(g,
+                new List<Player> { ourPlayer, otherPlayer },
+                ourPlayer.isTurn ? ourPlayer : otherPlayer);
 
-                    var other = (!ourPlayer.isTurn ? ourPlayer : otherPlayer);
-                    new TableDraw(other.tableCoordinates).DrawActiveCell(g, other.GetActiveCell(), true);
-                    new TableDraw(otherPlayer.tableCoordinates).DrawShips(g, otherPlayer.GetAllShips());
-                }
+                var other = (!ourPlayer.isTurn ? ourPlayer : otherPlayer);
+                new TableDraw(other.tableCoordinates).DrawActiveCell(g, other.GetActiveCell(), true);
+                new TableDraw(otherPlayer.tableCoordinates).DrawShips(g, otherPlayer.GetAllShips());
+
                 return;
             }
             else
             if (ourPlayer.IsReady() && otherPlayer.IsReady())
             {
-
-                server.SendData(ourPlayer);
-                server_update_timer.Stop();
-
-                ourPlayer.ChangeField(otherPlayer.field);
-                /*ourPlayer.ChangeName(otherPlayer.name);
-                ourPlayer.ChangeScores(otherPlayer.scores);*/
-                ourPlayer.PrepareForGame();
-
-                Thread.Sleep(1000 * waiting_time_in_sec);
-                server_update_timer.Start();
-
-                ourPlayer.isLoad = true;
-                everyoneIsReady = true;
+                if (!ourPlayer.isLoad && !otherPlayer.isLoad)
+                {
+                    otherPlayer_field = otherPlayer.field;
+                    ourPlayer.isLoad = true;
+                }
+                else if (ourPlayer.isLoad && otherPlayer.isLoad)
+                {
+                    ourPlayer.ChangeField(otherPlayer_field);
+                    ourPlayer.PrepareForGame();
+                    everyoneIsReady = true;
+                }
             }
             else
                 players_drawing.updatePrepare(g, ourPlayer);
@@ -124,7 +121,6 @@ namespace Sea_Battle.Classes
             server.SendData(ourPlayer);
             var other = server.GetData();
             if (other != null) otherPlayer = other;
-
 
             if (everyoneIsReady && !endGame)
             {
